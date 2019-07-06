@@ -1,0 +1,329 @@
+\documentclass[12pt]{article}
+\usepackage{float}
+\usepackage{amsthm}
+\usepackage{lineno}
+\usepackage{cite}
+\usepackage{amssymb,graphics,color,cite,amsmath}
+\usepackage{subfig}
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{psfrag}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{float}
+\usepackage{afterpage}
+
+\usepackage[noblocks]{authblk}
+ \usepackage{natbib}
+\usepackage{stackengine}
+
+\usepackage{xspace}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+
+\renewcommand{\(}{\left (}
+\renewcommand{\)}{\right )}
+
+\begin{document}
+
+
+
+
+\title{Effects of Nutrient Depletion on Tissue Growth in a Tissue-Engineering Scaffold Pore}
+\date{}
+
+
+\section{A mathematical model for flow within a scaffold pore}
+\subsection{Fluid Dynamics}
+
+The fluid has velocity $\hat{\boldsymbol{u}}=\hat{u} e_{\hat{r}}+\hat{v} \boldsymbol{e}_{\theta}+\hat{w} \boldsymbol{e}_{\hat{z}},$ pressure $\hat{p},$ and concentration $\hat{c},$ where $\boldsymbol{e}_{\hat{r}}, {e}_{\theta},$ and $\boldsymbol{e}_{\hat{z}}$ are unit vectors in the three corrsponding directions. Following from the idea in (Sanaei et al. 2018), the flow is assumed to be governed by the Stokes equations. We have the following scalings:
+
+
+\begin{eqnarray}
+\label{eq:non-dimensionalization}
+&\hat{ \bold{u}}=\displaystyle\frac{\hat{Q}_i}{\pi \hat R^2} \bold{u}=\displaystyle\frac{\hat{Q}_i}{\pi \hat R^2} (\epsilon u, \epsilon v, w), \quad \hat{p}=\displaystyle\frac{\hat \mu \hat L \hat{Q}_i}{\pi \hat R^4}p+\hat P_{\textrm{d}}, &\hspace{4mm}
+(\hat{r},\hat{a},\hat{z})=\hat L(\epsilon r,\epsilon a, z), \hat{c}=\hat{c}_{i} c, \hat{f}=\frac{Q_i}{\pi \hat{R}^{2}} \varepsilon f.
+\end{eqnarray}
+The equation that governs the concentration $\hat{c}$ is
+
+\begin{equation}
+	\frac{\partial \hat{c}}{\partial \hat{T}}=\hat{\nabla} \cdot \hat{\bold{Q}},
+\end{equation}
+where
+\begin{equation}
+\hat{\bold{Q}}=-\hat{\Sigma} \hat{\nabla} \hat{c}+\hat{\bold{u}} \hat{c}+\hat{f} \hat{c} e_{r}.
+\end{equation}
+Together with the rescalings above we get the dimensionless equation
+\begin{equation}
+\frac{\pi \hat{R}^{2} \hat{\sum}}{\hat{L} \varepsilon^{2} \hat{Q}_{i}}\left(\frac{1}{r} \frac{\partial}{\partial r}\left(r \frac{\partial c}{\partial r}\right)+\frac{1}{r^{2}} \frac{\partial^{2} c}{\partial \theta^{2}}+\varepsilon^{2} \frac{\partial^{2} c}{\partial z^{2}}\right)= \frac{\partial c}{\partial r} u+\frac{1}{\hat{r}}\frac{\partial c}{\partial \theta} v+\frac{\partial c}{\partial z} w+\frac{1}{r} \frac{\partial}{\partial r}(r f c)
+\end{equation}
+
+Define $(pe^*)^{-1} = \frac{\pi \hat{R}^{2} \hat{\sum}}{\hat{L} \varepsilon^{2} \hat{Q}_{i}}.$ We have the set of dimensionless equations governing the flow:
+ \begin{eqnarray}
+ &\frac{1}{\epsilon^{2}} \frac{\partial p}{\partial r}=\frac{1}{r} \frac{\partial}{\partial r}\left(r \frac{\partial u}{\partial r}\right)+\frac{1}{r^{2}} \frac{\partial^{2} u}{\partial \theta^{2}}+\epsilon^{2} \frac{\partial^{2} u}{\partial z^{2}}-\frac{u}{r^{2}}-\frac{2}{r^{2}} \frac{\partial v}{\partial \theta},
+ \label{Su} \\
+ &\frac{1}{\epsilon^{2} r} \frac{\partial p}{\partial \theta}=\frac{1}{r} \frac{\partial}{\partial r}\left(r \frac{\partial v}{\partial r}\right)+\frac{1}{r^{2}} \frac{\partial^{2} v}{\partial \theta^{2}}+\epsilon^{2} \frac{\partial^{2} v}{\partial z^{2}}-\frac{v}{r^{2}}+\frac{2}{r^{2}} \frac{\partial u}{\partial \theta},
+ \label{Sv} \\
+ &\frac{\partial p}{\partial z}=\frac{1}{r} \frac{\partial}{\partial r}\left(r \frac{\partial w}{\partial r}\right)+\frac{1}{r^{2}} \frac{\partial^{2} w}{\partial \theta^{2}}+\epsilon^{2} \frac{\partial^{2} w}{\partial z^{2}},
+ \label{Sw} \\
+ &\frac{1}{r} \frac{\partial}{\partial r}(r u)+\frac{1}{r} \frac{\partial v}{\partial \theta}+\frac{\partial w}{\partial z}=0,
+ \label{continuity}\\
+ &\frac{1}{pe^{*}}\left[\frac{1}{r} \frac{\partial}{\partial r}\left(r \frac{\partial c}{\partial r}\right)+\frac{1}{r^{2}} \frac{\partial^{2} c}{\partial \theta^{2}}+\varepsilon^{2} \frac{\partial^{2} c}{\partial z^{2}}\right]= \frac{\partial c}{\partial r} u+\frac{1}{{r}}\frac{\partial c}{\partial \theta} v+\frac{\partial c}{\partial z} w+\frac{1}{r} \frac{\partial}{\partial r}(r f c)
+ \end{eqnarray}
+
+holding in the flow domain $0\leq r\leq a(\theta,z,t)$, $0\leq z \leq 1$. Solution to these equations must also satisfy the following boundry conditions
+\begin{align}
+\label{BC:r=a}
+u=v=w=0 & \mbox{ on $r=a(\theta,z,t)$,}
+\end{align}
+enforcing no slip and no penetration at the {\color{black}fluid--cell-layer interface}, and {\color{black}the symmetry conditions}
+\begin{align}
+\label{BC:r=0}
+u=v=\frac{\partial w}{\partial r}=0 & \mbox{ {\color{black}at} $r=0$.}
+\end{align}
+\begin{equation}
+	\begin{cases}
+	\hat{c}(\hat{r}, {\theta}, 0, \hat{t})=\hat{c}_{i} \\
+	\left.\frac{\partial \hat{c}}{\partial \hat{r}}\right|_{\hat{r}=0}=0\\
+	\hat{\bold{Q}} \cdot\left.\hat{\bold{n}}\right|_{\hat{r}=\hat{a}}=\hat{\Lambda} \hat{c}
+	\end{cases}
+\end{equation}
+
+We assume that the (dimensionless) pressure drop across the length of the pore is given by $\zeta (t)$, which will increase monotonically to sustain the constant flux as the pore constricts under cell growth. The system is thus closed by applying the boundary conditions
+
+\begin{equation}
+	p|_{z=0}=\zeta(t), \quad p|_{z=1}=0,
+	\label{BC:pressure}
+\end{equation}
+and enforcing constant fluid influx,
+\begin{equation}
+	\int_0^{2\pi}\int_0^a w{\color{black}(r,\theta,0,t)}rdrd\theta=\pi.
+	\label{initial-flux-dimensionless}
+\end{equation}
+
+\subsection{Tissue growth}
+
+Adding concentration into consideration for the cell proliferation, we propose
+\begin{equation}
+	frac{\partial \hat{a}}{ \partial \hat{t}}=-{\hat{\lambda}}\hat{c} \hat{\kappa} f(\hat{\sigma}_{\hat {\rm s}}).
+\end{equation}
+
+
+
+
+
+
+
+
+
+
+
+\begin{equation}
+\hat{\Sigma}\left[\frac{1}{\hat{r}} \frac{\partial}{\partial \hat{r}^{2}}\left(\hat{r} \frac{\partial \hat{c}}{\partial \hat{r}}\right) +\frac{1}{\hat{r}^{2}} \frac{\partial^{2} \hat{c}}{\partial \hat{\theta}^{2}}+\frac{\partial^{2} \hat{c}}{\partial \hat{z}^{2}}\right]=\left(\hat{u}, \hat{v}, \hat{\omega}\right) \cdot(\frac{\partial \hat{c}}{\partial\hat{r}}, \frac{1}{\hat{r}}\frac{\partial\hat{c}}{\partial\hat{\theta}},\frac{\partial\hat{c}}{\partial\hat{z}})+\frac{1}{\hat{r}} \frac{\partial}{\partial \hat{r}}(\hat{r} \hat{f} \hat{c})
+\end{equation}
+
+\begin{equation}
+	\hat{c}=\hat{c}_{i} c, \hat{\bold{u}}=\frac{\hat{Q}_{i}}{\pi \hat{R}^{2}}(\varepsilon u, \varepsilon v, \omega)
+\end{equation}
+$$(\hat{r}, \hat{a}, \hat{z})=\hat{L}(\varepsilon r, \varepsilon a, z), \hat{\theta}=\theta, \frac{\hat{z}}{z}=\hat{L}$$
+$$\hat{f}=\frac{Q_i}{\pi \hat{R}^{2}} \varepsilon f$$
+
+\begin{equation}
+\hat{\Sigma}\frac{\hat{c}_i}{(\hat{L}\epsilon)^2}\left(\frac{1}{r} \frac{\partial}{\partial r}\left(r \frac{\partial c}{\partial r}\right)+\frac{1}{r^{2}} \frac{\partial^{2} c}{\partial \theta^{2}}+\varepsilon^{2} \frac{\partial^{2} c}{\partial z^{2}}\right)
+=\frac{\hat{Q}_i}{\pi \hat{R}^2}\frac{\hat{c}_i}{\hat{L}}
+\left[\left(\frac{\partial c}{\partial r} u+\frac{1}{\hat{r}}\frac{\partial c}{\partial \theta} v+\frac{\partial c}{\partial z} \omega\right)+\frac{1}{r} \frac{\partial}{\partial r}(r f c)\right]
+\end{equation}
+
+\begin{equation}
+\frac{\pi \hat{R}^{2} \hat{\sum}}{\hat{L} \varepsilon^{2} \hat{Q}_{i}}\left(\frac{1}{r} \frac{\partial}{\partial r}\left(r \frac{\partial c}{\partial r}\right)+\frac{1}{r^{2}} \frac{\partial^{2} c}{\partial \theta^{2}}+\varepsilon^{2} \frac{\partial^{2} c}{\partial z^{2}}\right)= \frac{\partial c}{\partial r} u+\frac{1}{\hat{r}}\frac{\partial c}{\partial \theta} v+\frac{\partial c}{\partial z} w+\frac{1}{r} \frac{\partial}{\partial r}(r f c)
+\end{equation}
+Let $\frac{1}{pe^{*}} = (pe^*)^{-1}.$
+\begin{equation}
+	\frac{1}{pe^{*}}\left[\frac{1}{r} \frac{\partial}{\partial r}\left(r \frac{\partial c}{\partial r}\right)+\frac{1}{r^{2}} \frac{\partial^{2} c}{\partial \theta^{2}}+\varepsilon^{2} \frac{\partial^{2} c}{\partial z^{2}}\right]= \frac{\partial c}{\partial r} u+\frac{1}{{r}}\frac{\partial c}{\partial \theta} v+\frac{\partial c}{\partial z} w+\frac{1}{r} \frac{\partial}{\partial r}(r f c)
+\end{equation}
+The above is equation 4 in the write up.
+
+Let ${pe}^* = pe \cdot \varepsilon,$ assuming $pe$ is of order $O(1).$ Write $x = x_0 + \varepsilon x_1 + \varepsilon^2 x_2 + O(\varepsilon^3)$ for $x \in \{ f, c, u, v, w\}.$ Matching the terms with the same order of $\varepsilon,$ we have
+\begin{equation}
+	\begin{cases}
+		O(\frac{1}{\varepsilon}): \frac{1}{pe}\left[\frac{1}{r} \frac{\partial}{\partial r}\left(r \frac{\partial c_{0}}{\partial r}\right)+ \frac{1}{r^2}\frac{\partial^2 c_0 }{\partial \theta^2}\right] = 0\\
+		\\
+		O(1): \frac{1}{pe}\left[\frac{1}{r} \frac{\partial}{\partial r}\left(r \frac{\partial c_{1}}{\partial r}\right)+\frac{1}{r^{2}} \frac{\partial^{2} c_{1}}{\partial \theta^{2}}\right] = \frac{\partial c_{0}}{\partial r} u_{0}+\frac{1}{r} \frac{\partial c_{0}}{\partial \theta} v_{0}+\frac{\partial c_{0}}{\partial z} w_{0}+\frac{1}{r} \frac{\partial}{\partial r}\left(r f_{0} c_{0}\right)\\
+		\\
+		O(\varepsilon): \frac{1}{pe} \left[\frac{1}{r} \frac{\partial}{\partial r}\left(r \frac{\partial c_{2}}{\partial r}\right)+\frac{1}{r^{2}} \frac{\partial^{2} c_{2}}{\partial \theta^{2}} + \frac{\partial^2 c_0}{\partial z^2}\right] = \\
+
+		 \frac{\partial c_{0}}{\partial r} u_{1}+\frac{\partial c_{1}}{\partial r} u_{0}+\frac{1}{r} \frac{\partial c_{0}}{\partial \theta} v_{1}+\frac{1}{r} \frac{\partial c_{1}}{\partial \theta} v_{0} +\frac{\partial c_{0}}{\partial z} w_{1}+\frac{\partial c_{1}}{\partial z} w_{0}+\frac{1}{r} \frac{\partial}{\partial r}\left(r\left(f_{0} c_{1}+f_{1} c_{0}\right)\right)\\
+		 \\
+
+		 O(\varepsilon^2): \frac{1}{pe} \left[\frac{1}{r} \frac{\partial}{\partial r}\left(r \frac{\partial c_{3}}{\partial r}\right)+\frac{1}{r^{2}}\frac{\partial^{2} c_{3}}{\partial \theta^{2}}+\frac{\partial^{2} c_{1}}{\partial z^{2}}\right] = \\
+		\frac{\partial c_{0}}{\partial r} u_{2}+\frac{\partial c_{1}}{\partial r} u_{1}+\frac{\partial c_{2}}{\partial r} u_{0}
+		 +\frac{1}{r} \frac{\partial c_{0}}{\partial \theta} v_{2}+\frac{1}{r} \frac{\partial c_{1}}{\partial \theta} v_{1}+\frac{1}{r} \frac{\partial c_{2}}{\partial \theta} v_{0}+\frac{\partial c_{0}}{\partial z} w_{2}+\frac{\partial c_{1}}{\partial z} w_{1}+\frac{\partial c_{2}}{\partial z} w_{0} +\frac{1}{r} \frac{\partial}{\partial r}(r(f_0 c_2 + f_2 c_0 + f_1 c_1))\\
+		 \\
+		 O(\varepsilon^3): \text{other higher order terms}
+		 \label{writeupeq7}
+	\end{cases}
+\end{equation}
+The above is equation 7 in the write up
+
+Write $$ \hat{a}=\hat{a}_{0}(t)+\varepsilon \hat{a}_{1}(\hat{z}, t)+\varepsilon^{2} \hat{a}_{2}\left(\hat{z}, \theta, t\right)$$
+\begin{align}
+	\hat{n} &=\frac{\hat{\nabla}(\hat{r}-\hat{a})}{|\hat{\nabla}(\hat{r}-\hat{a})|} \\
+	& = \frac{\left(1,-\frac{1}{\gamma} \frac{\partial \hat{a}}{\partial \theta},-\frac{\partial \hat{a}}{\partial \hat{z}}\right)}{\sqrt{1+\frac{1}{\hat{r}^{2}}\left(\frac{\partial \hat{a}}{\partial \theta}\right)^{2}+\left(\frac{\partial \hat{a}}{\partial \hat{z}}\right)^{2}}} \\
+	& = \frac{\left(1,-\frac{\varepsilon^{2}}{\hat{r}} \frac{\partial \hat{a}_{2}}{\partial \theta},-\varepsilon \frac{\partial \hat{a}_{1}}{\partial \hat{z}}-\varepsilon^{2} \frac{\partial \hat{a}_{2}}{\partial \hat{z}}\right)}
+	{\sqrt{1+\left(\frac{\varepsilon^{2}}{\hat{r}} \frac{\partial \hat{a}_{2}}{\partial \theta}\right)^{2}+\left(\varepsilon \frac{\partial \hat{a}_{1}}{\partial \hat{z}}+\varepsilon^{2} \frac{\partial \hat{a}_{2}}{\partial \hat{z}}\right)^{2}}}\\
+	&= \left(1,-\frac{\varepsilon^{2}}{\hat{r}} \frac{\partial \hat{a}_{2}}{\partial \theta},-\varepsilon \frac{\partial \hat{a}_{1}}{\partial \hat{z}}-\varepsilon^{2} \frac{\partial \hat{a}_{2}}{\partial \hat{z}}\right) \cdot \left(1-\frac{1}{2} \varepsilon^{2}\left(\frac{\partial \hat{a}_{1}}{\partial \hat{z}}\right)^{2}+O\left(\varepsilon^{3}\right)\right) \\
+	&= \left(1-\frac{1}{2} \varepsilon^{2}\left(\frac{\partial \hat{a}_{1}}{\partial \hat{z}}\right)^{2},-\frac{\varepsilon^{2}}{\hat{r}} \frac{\partial \hat{a}_{2}}{\partial \theta},-\varepsilon \frac{\partial \hat{\alpha}_{1}}{\partial \hat{z}}\right) +O\left(\varepsilon^{3}\right) \\
+	&= \left(1,-\frac{\varepsilon^{2}}{r} \frac{\partial a_{2}}{\partial \theta},-\varepsilon^{2} \frac{\partial a_{1}}{\partial z}\right) + O\left(\varepsilon^{3}\right)
+\end{align}
+
+Boundry conditions:
+\begin{equation}
+	\begin{cases}
+	\hat{c}(\hat{r}, {\theta}, 0, \hat{t})=\hat{c}_{i} \\
+	\left.\frac{\partial \hat{c}}{\partial \hat{r}}\right|_{\hat{r}=0}=0\\
+	\hat{\bold{Q}} \cdot\left.\hat{\bold{n}}\right|_{\hat{r}=\hat{a}}=\hat{\Lambda} \hat{c}
+	\end{cases}
+\end{equation}
+Implies
+\begin{equation}
+	\begin{cases}
+	c(r, \theta, 0, t)=1 \\
+	\left.\frac{\partial c}{\partial r}\right|_{r=0}=0\\
+	\hat{\bold{Q}} = -\hat{\Sigma} \frac{\hat{c}_{i}}{\hat{L} \varepsilon}\left(\frac{\partial c}{\partial r}, \frac{\partial c}{\partial \theta}, \frac{\varepsilon \partial c}{\partial z}\right) + (\hat{u}, \hat{v}, \hat{w}) \hat{c} + (\frac{\hat{Q}_i \hat{c}_{i} \varepsilon}{\pi \hat{R}^{2}} f c, 0, 0) = \hat{\Lambda} \hat{c}_i c
+	\end{cases}
+\end{equation}
+
+Let $pe^{*}=\frac{\hat{L} \varepsilon^{2} \hat{Q}_{i}}{\pi \hat{R}^{2} \hat{\sum}}.$
+
+\begin{align}
+	\hat{\Lambda} \hat{c}_i c &= \left[-\frac{\hat{\Sigma} \hat{c}_i}{\hat{L}\varepsilon}\left(\frac{\partial c}{\partial r}, \frac{1}{r} \frac{\partial c}{\partial \theta}, \frac{\varepsilon \partial c}{\partial z}\right) + \left(\frac{\hat{Q}_i \hat{c}_i \varepsilon}{\pi \hat{R}^2}fc, 0,0\right)\right]\cdot \hat{n} \Bigg\rvert_{r = {a}}
+\end{align}
+Let $\lambda ^* = \frac{\hat{\Lambda} \pi \hat{R}^{2}}{\widehat{Q}_{i} \varepsilon},$ we have
+
+\begin{equation}
+\lambda^{*} c=\left.\left[-\frac{1}{pe^{*}} \frac{\partial c}{\partial r}+f c+\frac{\varepsilon^2}{pe^{*}r^{2}} \frac{\partial a_{2}}{\partial \theta}\frac{\partial c}{\partial \theta}\right]\right|_{r={a}} + O\left(\varepsilon^{3}\right)
+\end{equation}
+The above is equation 6 in the write up.
+
+Now, let $pe^{*} = \varepsilon pe,$ we have
+\begin{equation}
+	\lambda^* c =\left.\left\{-\frac{1}{\varepsilon}\frac{1}{pe} \frac{\partial c}{\partial r}+f c+\frac{\varepsilon}{r^{2}} \frac{\partial a_{2}}{\partial \theta}\frac{1}{pe}\frac{\partial c}{\partial \theta}\right\}\right|_{r=\hat{a}}
+\end{equation}
+The above is equation $8$ in the write up.
+
+Next we do expansion.
+
+\begin{equation}
+	\begin{cases}
+		O(\frac{1}{\varepsilon}): 0 = \left.\left[-\frac{1}{pe}\frac{c_0}{r}\right]\right|_{r={a}}\\
+		O(1): \lambda^* c_0 = \left.\left[-\frac{1}{pe}\frac{\partial c_{1}}{\partial r}+f_{0} c_{0}\right]\right|_{r={a}}\\
+		O(\varepsilon): \lambda^* c_1 = \left.\left[ -\frac{1}{pe} \frac{\partial c_{2}}{\partial r}+f_{0} c_{1}+f_{1} c_{0}+\frac{1}{pe} \frac{1}{r^{2}} \frac{\partial a_{2}}{\partial \theta} \frac{\partial c_{0}}{\partial \theta}\right]\right|_{r={a}}\\
+		O(\varepsilon^2): \lambda^* c_2 = \left.\left[ -\frac{1}{pe} \frac{\partial c_3}{\partial r}+f_{2} c_{0}+f_{0} c_{2} + f_1 c_1 + \frac{1}{pe}\frac{1}{r^{2}} \frac{\partial a_{2}}{\partial \theta} \frac{\partial c_{1}}{\partial \theta} + \frac{1}{pe} \frac{\partial a_1 }{\partial z} \frac{\partial c_0 }{\partial z}\right]\right|_{r={a}}\\
+		O(\varepsilon^3): \text{higher order terms.}
+	\end{cases}
+	\label{writeupeq8}
+\end{equation}
+
+From $O(\frac{1}{\varepsilon})$ terms in (\ref{writeupeq7}) and (\ref{writeupeq8}) we easily have that $\frac{\partial c_0}{\partial r} = 0,$ so $c_0$ is a function of $z$ only.
+
+From $O(1)$ term in (\ref{writeupeq7}) we have
+\begin{equation}
+    \frac{\partial c_0}{\partial z} \frac{\xi_0}{4}(a_0^2 - r^2) + \frac{1}{r}\frac{\partial}{\partial r}(r f_0 c_0) = \frac{1}{pe} \left[\frac{1}{r} \frac{\partial}{\partial r}\left( r \frac{\partial c_1}{\partial r} \right) + \frac{1}{r^2}\frac{\partial^2 c_1}{\partial \theta^2} \right]
+\end{equation}
+Next, apply $\int_0^{2\pi} \int_0^{a_0} ... rdrd\theta$ on both sides. We get the differential equation
+\begin{equation}
+    \frac{\partial c_0}{\partial z} = -2\lambda^* a_0 c_0
+\end{equation}
+Together with the condition that $c_0(z) = 1$ we have
+\begin{equation}
+    c_0(z) = e^{-2\lambda^* a_0 z}
+\end{equation}
+
+Next we solve for $c_1.$
+From $O(\varepsilon)$ term in (\ref{writeupeq7}) we have
+\begin{equation}
+    \frac{1}{pe}\left[ \frac{1}{r}\frac{\partial}{\partial r}\left(r \frac{\partial c_2}{\partial r}\right) + \frac{1}{r^2} \frac{\partial^2 c_2}{\partial \theta^2} + \frac{\partial^2 c_0}{\partial z^2}\right] = \frac{\partial c_0}{\partial z}w_1 + \frac{\partial c_1}{\partial z} w_0 + \frac{1}{r } \frac{\partial}{\partial r} (r (f_0 c_1 + f_1 c_0))
+\end{equation}
+where $w_1 = \frac{a_1 \xi_0}{2 a_0}(2r^2-a_0^2),$ $w_0 = \frac{\xi_0}{4}(a_0^2 - r^2),$ and $\xi_0 = \frac{8}{a_0^4}.$
+
+Similarly apply $\int_0^{2\pi} \int_0^{a_0} ... rdrd\theta$ on both sides, we get
+\begin{equation}
+    \frac{1}{pe}\left[ a_0 \frac{\partial c_2}{\partial r}(r=a_0) + \frac{1}{2}a_0^2 \frac{\partial^2 c_0}{\partial z^2} \right] = \frac{\partial c_1}{\partial z} \frac{\xi_0 a_0^4}{16} + \left.a_0 (f_0 c_1 + f_1 c_0)\right|_{r=a_0} \label{tempeqc1}
+\end{equation}
+Now from $O(\varepsilon)$ term in (\ref{writeupeq8})
+\begin{equation}
+    \left. (f_0 c_1 + f_1 c_0)\right|_{r=a_0} = \lambda^* c_1 + \frac{1}{pe} \frac{\partial c_2}{\partial r}(r=a_0)
+\end{equation}
+Substitute $\left. (f_0 c_1 + f_1 c_0)\right|_{r=a_0}$ into (\ref{tempeqc1}), with some calculations we arrive at the differential equation
+\begin{equation}
+    \frac{\partial c_1}{\partial z} + 2a_0 \lambda^* c_1 = \frac{4 a_0^4}{pe}(\lambda^*)^2 e^{-2\lambda^* a_0 z}
+\end{equation}
+With the extra condition that $c_1(z=0) = 0$ we have
+\begin{equation}
+    c_1 (z) = \frac{4a_0^4}{pe}(\lambda^*)^2 z e^{-2a_0\lambda^* z}
+\end{equation}
+
+
+Last we solve for $c_2.$ From $O(\varepsilon^2)$ term in (\ref{writeupeq7}) we have
+
+\begin{equation}
+    \frac{1}{pe}\left[\frac{1}{r}\frac{\partial}{\partial r} \left(r \frac{\partial c_3}{\partial r}\right) + \frac{1}{r^2} \frac{\partial^2 c_3}{\partial \theta_2} + \frac{\partial^2 c_1}{\partial z^2}\right] = \frac{\partial c_{0}}{\partial z} w_{2}+\frac{\partial c_{1}}{\partial z} w_{1}+\frac{\partial c_{2}}{\partial z} w_{0} + \frac{1}{r} \frac{\partial}{\partial r}\left[r\left(f_{0} c_{2}+f_{2} c_{0}+f_{1} c_{1}\right)\right]
+\end{equation}
+
+Similarly apply $\int_0^{2\pi} \int_0^{a_0} ... rdrd\theta$ on both sides, we get
+
+\begin{equation}
+    \frac{1}{pe} \left[ a_0 \frac{\partial c_{3}}{\partial r}\left(a_{0}\right)+\frac{1}{2} a_{0}^{2} \frac{\partial^{2} c_{1}}{\partial z^{2}} \right] = \frac{\partial c_0}{\partial z} \xi_{0} \int_0^{a_0} r \tilde{w}_{2}  d r + \frac{\xi_0}{4} \int_0^{a_0} \frac{\partial c_2}{\partial z} (a_0^2 r - r^3)dr + a_0 \left.\left[f_{0} c_{2}+ f_{2} c_0 +f_{1} c_{1}\right]\right|_{r=a_{0}}
+\end{equation}
+With some calculation, one observes that
+\begin{equation}
+    \xi_0 \int_0^{a_0}  r \tilde{w}_{2}  d r  = -\frac{a_1^2}{a_0^2}+\frac{1}{2}\frac{a_1^4}{a_0^4}
+\end{equation}
+Again from $O(\varepsilon^2)$ term in (\ref{writeupeq8}) we have
+\begin{equation}
+    \left.\left[f_{0} c_{2}+ f_{2} c_0 +f_{1} c_{1}\right]\right|_{r=a_{0}} = \lambda^{*} c_{2}+\frac{1}{pe} \frac{\partial c_3}{\partial r}\left(r=a_{0}\right) -\frac{1}{p e} \frac{\partial a_{1}}{\partial z} \frac{\partial c_{0}}{\partial z}
+\end{equation}
+Combining this yields the equation
+\begin{equation}
+    \frac{1}{2pe} a_{0}^{2} \frac{\partial^{2} c_{1}}{\partial z^{2}} = \left(-\frac{a_1^2}{a_0^2}+\frac{1}{2}\frac{a_1^4}{a_0^4}\right) \frac{\partial c_0}{\partial z} + \frac{\xi_0}{4} \int_0^{a_0} \frac{\partial c_2}{\partial z} (a_0^2 r - r^3)dr  + a_0 \lambda^* c_2 - \frac{a_0}{pe}\frac{\partial a_1}{\partial z} \frac{\partial c_0}{ \partial z}
+\end{equation}
+Observe that every term, except for $a_0 \lambda^* c_2,$ in the above equation is a function of $z$ only. Hence this implies $c_2$ depends solely on $z.$ The observation allows us to get the differential equation
+\begin{equation}
+    \frac{\partial c_2}{\partial z}+2 a_{0} \lambda^{*} c_{2}=
+    \frac{a_{0}^{2}}{p e} \frac{\partial^{2} c_1}{\partial z^{2}} + \frac{2 a_{0}}{p e} \frac{\partial a_{1}}{\partial z} \frac{\partial c_{0}}{\partial z} +\left(\frac{2 a_1^{2}}{a_0^2}-\frac{a_{1}^{4}}{a_{0}^{4}}\right) \frac{\partial c_{0}}{\partial z}
+\end{equation}
+Together with the extra condition that $c_2(z=0) =0,$
+we get
+\begin{equation}
+    c_2(z) = e^{-2a_0 \lambda^*z} \left[ z\left( \frac{-16 a_0^7 (\lambda^*)^3}{pe^2} - \frac{4a_0^2 \lambda^*}{pe}\left(\frac{\partial a_1}{\partial z}\right) - \frac{4a_1^2 \lambda^*}{a_0} + \frac{2a_1^4 \lambda^*}{a_0^3}\right)+ \frac{1}{2}z^2 \frac{16 a_0^8 (\lambda^*)^4}{pe^2}\right]
+\end{equation}
+
+Next we calculate $f(\sigma_s).$ Write $\sigma_s = \sigma_{s_0} + \varepsilon \sigma_{s_1} + \varepsilon^2 \sigma_{s_2} + O(\varepsilon^3),$ where $\sigma_{s_2} = \sigma_{s_{2a}} \cos n \theta+\sigma_{s_{2 b}}(z,t).$
+By Taylor expansion, we have
+\begin{equation}
+    f(\sigma_s) = f(\sigma_{s_0}) + \varepsilon \sigma_{s_1} f'(\sigma_{s_0}) + \varepsilon^2 \left[ \frac{1}{2} \sigma^2_{s_1} f''(\sigma_{s_0}) + \left(\sigma_{s_{2a}} \cos n \theta+\sigma_{s_{2 b}}(z,t)\right)f'(\sigma_{s_0})\right] + O(\varepsilon^3).
+\end{equation}
+Let $f_0= f(\sigma_{s_0}), f_1 = \sigma_{s_1} f'(\sigma_{s_0}),$ and $f_2 = \frac{1}{2} \sigma^2_{s_1} f''(\sigma_{s_0}) + \sigma_{s_2}f'(\sigma_{s_0}).$
+From the equation \begin{equation}
+    \frac{\partial a}{\partial t} = -ckf(\sigma_s),
+\end{equation}
+and $c = c_0 + \varepsilon c_1 + \varepsilon^2 c_2 + O(\varepsilon^3), k = k_0 + \varepsilon k_1 + \varepsilon^2 k_2 \cos n \theta + O(\varepsilon^3),$
+we have \begin{align}
+    &\frac{\partial a_0}{\partial t} + \varepsilon \frac{\partial a_1}{\partial t} + \varepsilon^2 \frac{\partial a_2}{\partial t} \\
+    &= -\left\{c_0 + \varepsilon c_1 + \varepsilon^2 c_2 + O(\varepsilon^3)\right\}  \left\{k_0 + \varepsilon k_1 + \varepsilon^2 k_2 \cos n \theta + O(\varepsilon^3)\right\}  \\
+    &\left\{f + \varepsilon \sigma_{s_1} f' + \varepsilon^2 \left[ \frac{1}{2} 5 + \left(\sigma_{s_{2a}} \cos n \theta+\sigma_{s_{2 b}}(z,t)\right)f'\right] + O(\varepsilon^3)\right\}
+\end{align}
+Matching order of $\varepsilon$ we have
+\begin{equation}
+    \begin{cases}
+    O(1): \frac{\partial a_0}{\partial t} = -c_0 k_0 f_0\\
+    \\
+    O(\varepsilon): \frac{\partial a_1}{\partial t} = -[c_0 k_0 \sigma_{s_1} f' + c_0 k_1 f + c_1 k_0 f]\\
+    \\
+    O(\varepsilon^2): \frac{\partial a_2}{\partial t} = -\left\{ (c_2 k_0 + c_1 k_1)f + (c_1 k_0+c_0 k_1) \sigma_{s_1} f' + (\frac{1}{2}  \sigma^2_{s_1} f'' + \sigma_{s_{2 b}} f')c_0 k_0\right\} \\
+    - \left\{ c_0 k_2 f + c_0 k_0 \sigma_{s_{2 a}}f'\right\}\cos n \theta,
+    \end{cases}
+\end{equation}
+where $f, f', f''$ are all evaluated at $\sigma_{s_0}.$
+\begin{equation}
+    \exp\{2\lambda^* z a_0(t)\} \frac{a_0(t)-1}{2\lambda^* z} = -F_1 t + \exp\{2\lambda^* z a_0(0)\} + \frac{a_0(0)- 1}{2 \lambda^* z}
+\end{equation}
+\end{document}
