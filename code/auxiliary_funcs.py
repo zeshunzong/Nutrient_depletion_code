@@ -8,6 +8,7 @@ import cv2
 import os
 from os.path import isfile, join
 from matplotlib import cm
+import scipy.io
 
 def transpose(x):
     '''a function used to take transpose of each matrix inside a tensor x
@@ -117,7 +118,12 @@ def convert_frames_to_video(pathIn,pathOut,fps):
         os.remove('./data_for_video/.DS_Store')
 
     frame_array = []
-    files = [f for f in os.listdir(pathIn) if isfile(join(pathIn, f))]
+    files = []
+    for data_file in sorted(os.listdir(pathIn)):
+        if isfile(join(pathIn, data_file)):
+            files.append(data_file)
+
+    #files = [f for f in os.listdir(pathIn) if isfile(join(pathIn, f))]
 
     #for sorting the file names properly
     #files.sort(key = lambda x: int(x[5:-4]))
@@ -234,3 +240,136 @@ def plot_against_z_at_different_time(data_mat, variable_name, view_angle = 0):
     plt.legend()
     plt.title(variable_name + " against z, at different times")
     plt.show()
+
+'''This function automatically generates a plot of the variable you want,
+against t, at six different z's, z= 0, 0.2, 0.40, 0.6, 0.80, 1. The angle of
+of plot is by default theta=0, can be changed manually, shoulbe be an integer between 0 and num_theta'''
+def plot_against_t_at_different_z(data_mat, variable_name, endtime, view_angle = 0):
+    # data_mat is a 4d matrix, variable_name is the string name of the data, used for title, should be a or c
+    # endtime is the time t1 in the main script
+    num_t, num_z, num_r, num_theta = np.shape(data_mat)
+    t_vec = np.linspace(0, endtime ,num_t)
+    z_position = np.zeros(6)
+    for i in range(6):
+        z_position[i] = int(num_z * i/5)
+
+    plt.plot(t_vec, data_mat[:,int(z_position[0]), 0, view_angle], label = r"$z=0$")
+    plt.plot(t_vec, data_mat[:,int(z_position[1]), 0, view_angle], label = r"$z=0.2$")
+    plt.plot(t_vec, data_mat[:,int(z_position[2]), 0, view_angle], label = r"$z=0.4$")
+    plt.plot(t_vec, data_mat[:,int(z_position[3]), 0, view_angle], label = r"$z=0.6$")
+    plt.plot(t_vec, data_mat[:,int(z_position[4]), 0, view_angle], label = r"$z=0.8$")
+    plt.plot(t_vec, data_mat[:,-1, 0, view_angle], label = r"$z=1$")
+    plt.legend()
+    plt.title(variable_name + " against t, at different z's")
+    plt.show()
+
+
+'''
+Observe that our matrices for saving data are too large. Here we try to reduce
+the size by removing duplicates.
+Note: a0, a1, a are changing only with t, z, and theta, so can be reduced to 3D matrix
+Note: c0, c1, c2, c are changing only with t and z
+Note: Lambda2, Gamma2, sigmaS0, sigmaS1 are only changing with t and z. So reduced to 2D matrix
+'''
+def reduce_mat_size_to_3D(mat4d):
+    # this function applies to a0, a1, and a
+    return mat4d[:,:,0,:]
+
+def reduce_mat_size_to_2D(mat4d):
+    # this function applies to c0, c1, c2, c, Lambda2, Gamma2, sigmaS0, sigmaS1
+    return mat4d[:,:,0,0]
+
+def reconstruct_4dmat_from_3d(mat3d, num_t, num_z, num_r, num_theta):
+    # this function applies to reduced version of a0, a1, and a
+    mat4d = np.zeros([num_t, num_z, num_r, num_theta])
+    for i in range(num_r):
+        mat4d[:,:,i,:] = mat3d
+    return mat4d
+
+def reconstruct_4dmat_from_2d(mat2d, num_t, num_z, num_r, num_theta):
+    # this function applies to reduced version of c0, c1, c2, c, Lambda2, Gamma2, sigmaS0, sigmaS1
+    mat4d = np.zeros([num_t, num_z, num_r, num_theta])
+    for i in range(num_r):
+        for j in range(num_theta):
+            mat4d[:,:,i,j] = mat2d
+
+    return mat4d
+
+def get_reduced_mats(a0, a1, a, c0, c1, c2, c, Lambda2, Gamma2, sigmaS0, sigmaS1):
+    # return a sequence of 2d and 3d matrices
+    reduced_a0 = reduce_mat_size_to_3D(a0)
+    reduced_a1 = reduce_mat_size_to_3D(a1)
+    reduced_a = reduce_mat_size_to_3D(a)
+    reduced_c0 = reduce_mat_size_to_2D(c0)
+    reduced_c1 = reduce_mat_size_to_2D(c1)
+    reduced_c2 = reduce_mat_size_to_2D(c2)
+    reduced_c = reduce_mat_size_to_2D(c)
+    reduced_Lambda2 = reduce_mat_size_to_2D(Lambda2)
+    reduced_Gamma2 = reduce_mat_size_to_2D(Gamma2)
+    reduced_sigmaS0 = reduce_mat_size_to_2D(sigmaS0)
+    reduced_sigmaS1 = reduce_mat_size_to_2D(sigmaS1)
+    return reduced_a0, reduced_a1, reduced_a, reduced_c0, reduced_c1, reduced_c2, reduced_c, reduced_Lambda2, reduced_Gamma2, reduced_sigmaS0, reduced_sigmaS1
+
+def get_back_mats(reduced_a0, reduced_a1, reduced_a, reduced_c0, reduced_c1, reduced_c2, reduced_c, reduced_Lambda2, reduced_Gamma2, reduced_sigmaS0, reduced_sigmaS1, sizes):
+    # return a sequence of 4d matrices
+    num_t, num_z, num_r, num_theta = sizes
+    a0 = reconstruct_4dmat_from_3d(reduced_a0, num_t, num_z, num_r, num_theta)
+    a1 = reconstruct_4dmat_from_3d(reduced_a1, num_t, num_z, num_r, num_theta)
+    a = reconstruct_4dmat_from_3d(reduced_a, num_t, num_z, num_r, num_theta)
+    c0 = reconstruct_4dmat_from_2d(reduced_c0, num_t, num_z, num_r, num_theta)
+    c1 = reconstruct_4dmat_from_2d(reduced_c1, num_t, num_z, num_r, num_theta)
+    c2 = reconstruct_4dmat_from_2d(reduced_c2,num_t, num_z, num_r, num_theta)
+    c = reconstruct_4dmat_from_2d(reduced_c, num_t, num_z, num_r, num_theta)
+    Lambda2 = reconstruct_4dmat_from_2d(reduced_Lambda2,num_t, num_z, num_r, num_theta)
+    Gamma2 = reconstruct_4dmat_from_2d(reduced_Gamma2,num_t, num_z, num_r, num_theta)
+    sigmaS0 = reconstruct_4dmat_from_2d(reduced_sigmaS0,num_t, num_z, num_r, num_theta)
+    sigmaS1 = reconstruct_4dmat_from_2d(reduced_sigmaS1,num_t, num_z, num_r, num_theta)
+
+    return a0, a1, a, c0, c1, c2, c, Lambda2, Gamma2, sigmaS0, sigmaS1
+
+def store_simulation_results(a0, a1, a, c0, c1, c2, c, Lambda2, Gamma2, sigmaS0, sigmaS1, folder_name):
+    # store the results as matrices
+    os.chdir(os.path.dirname(__file__))
+    os.chdir("./" + folder_name + "/")
+    reduced_a0, reduced_a1, reduced_a, reduced_c0, reduced_c1, reduced_c2, reduced_c, reduced_Lambda2, reduced_Gamma2, reduced_sigmaS0, reduced_sigmaS1 = get_reduced_mats(a0, a1, a, c0, c1, c2, c, Lambda2, Gamma2, sigmaS0, sigmaS1)
+    scipy.io.savemat("a0_mat", mdict = {"a0": reduced_a0})
+    scipy.io.savemat("a1_mat", mdict = {"a1": reduced_a1})
+    scipy.io.savemat("Lambda2_mat", mdict = {"Lambda2": reduced_Lambda2})
+    scipy.io.savemat("Gamma2_mat", mdict = {"Gamma2": reduced_Gamma2})
+    scipy.io.savemat("a_mat", mdict = {"a": reduced_a})
+    scipy.io.savemat("sigmaS0_mat", mdict = {"sigmaS0": reduced_sigmaS0})
+    scipy.io.savemat("sigmaS1_mat", mdict = {"sigmaS1": reduced_sigmaS1})
+    scipy.io.savemat("c_mat", mdict = {"c": reduced_c})
+    scipy.io.savemat("c0_mat", mdict = {"c0": reduced_c0})
+    scipy.io.savemat("c1_mat", mdict = {"c1": reduced_c1})
+    scipy.io.savemat("c2_mat", mdict = {"c2": reduced_c2})
+
+def load_simulation_results(folder_name, sizes):
+    os.chdir(os.path.dirname(__file__))
+    os.chdir("./" + folder_name + "/")
+
+    reduced_a0 = scipy.io.loadmat("a0_mat.mat")["a0"]
+    reduced_a1 = scipy.io.loadmat("a1_mat.mat")["a1"]
+    reduced_a = scipy.io.loadmat("a_mat.mat")["a"]
+
+    reduced_c0 = scipy.io.loadmat("c0_mat.mat")["c0"]
+    reduced_c1 = scipy.io.loadmat("c1_mat.mat")["c1"]
+    reduced_c2 = scipy.io.loadmat("c2_mat.mat")["c2"]
+    reduced_c = scipy.io.loadmat("c_mat.mat")["c"]
+
+    reduced_Lambda2 = scipy.io.loadmat("Lambda2_mat.mat")["Lambda2"]
+    reduced_Gamma2 = scipy.io.loadmat("Gamma2_mat.mat")["Gamma2"]
+    reduced_sigmaS0 = scipy.io.loadmat("sigmaS0_mat.mat")["sigmaS0"]
+    reduced_sigmaS1 = scipy.io.loadmat("sigmaS1_mat.mat")["sigmaS1"]
+
+    return get_back_mats(reduced_a0, reduced_a1, reduced_a, reduced_c0, reduced_c1, reduced_c2, reduced_c, reduced_Lambda2, reduced_Gamma2, reduced_sigmaS0, reduced_sigmaS1, sizes)
+
+
+
+def make_video(a, video_name):
+    '''make video'''
+    os.chdir(os.path.dirname(__file__))
+    # the above command makes sure that we are working in the current dir
+    pathIn = './data_for_video/'
+    pathOut = video_name
+    make_cylinder_video(pathIn, pathOut, a[:,:,0,:])
