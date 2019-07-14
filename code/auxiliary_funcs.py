@@ -77,7 +77,7 @@ def plot_cylinder2(a_mat_trunc):
     ax = fig.gca(projection='3d')
 
     num_z, num_theta = np.shape(a_mat_trunc)
-    z_metric = np.linspace(0,1,num_z)
+    z_metric = np.linspace(0,-1,num_z)
 
     #2D matrix
     rr_mat = a_mat_trunc
@@ -88,7 +88,7 @@ def plot_cylinder2(a_mat_trunc):
     # the z_coordinate of each point in first_half[i,j] = np.linspace(0,1, num_z)[i]
     # the x_coordinate of each point in first_half[i,j] = rcostheta = first_half[i,j] * cos(np.linspace(0, 2pi, num_theta)[j])
     # the y_coordinate ... = first_half[i,j] * sin(np.linspace(0, 2pi, num_theta)[j])
-    ZMAT = np.outer(np.linspace(0,1,num_z),np.ones(int(num_theta/2)+1))
+    ZMAT = np.outer(z_metric,np.ones(int(num_theta/2)+1))
     XMAT = first_half * np.outer(np.ones(num_z),np.cos(np.linspace(0, 2*np.pi, num_theta)[:int(num_theta/2)+1]))
     YMAT = first_half * np.outer(np.ones(num_z),np.sin(np.linspace(0, 2*np.pi, num_theta)[:int(num_theta/2)+1]))
     ax.plot_surface(XMAT, YMAT, ZMAT, linewidth = 0.02, alpha = 0.8, cmap=cm.coolwarm)
@@ -96,14 +96,14 @@ def plot_cylinder2(a_mat_trunc):
 
     # plot the second half of the cylinder, theta from pi to 2pi
     second_half = rr_mat[:,int(num_theta/2):]
-    ZMAT2 = np.outer(np.linspace(0,1,num_z),np.ones(num_theta - int(num_theta/2)))
+    ZMAT2 = np.outer(z_metric,np.ones(num_theta - int(num_theta/2)))
     XMAT2 = second_half * np.outer(np.ones(num_z),np.cos(np.linspace(0, 2*np.pi, num_theta)[int(num_theta/2):]))
     YMAT2 = second_half * np.outer(np.ones(num_z),np.sin(np.linspace(0, 2*np.pi, num_theta)[int(num_theta/2):]))
 
     surf = ax.plot_surface(XMAT2, YMAT2, ZMAT2, linewidth = 0.02, alpha = 0.8, cmap=cm.coolwarm)
     fig.colorbar(surf, shrink = 1, aspect=2)
 
-    ax.set_zlim(0,1)
+    ax.set_zlim(-1,0)
     ax.set_xlim(-1.1,1.1)
     ax.set_ylim(-1.1,1.1)
     ax.set_xlabel('$x$ axis')
@@ -161,7 +161,9 @@ def make_cylinder_video(pathIn, pathOut, a_as_t, fps=5):
     for n in range(num_t):
         plot_cylinder2(a_as_t[n,:,:])
         if n < 10:
-            pic_name = pathIn + 'frame0' + str(n) + '.png'
+            pic_name = pathIn + 'frame00' + str(n) + '.png'
+        elif n < 100:
+            pic_name = './data_for_video/frame0' + str(n) + '.png'
         else:
             pic_name = './data_for_video/frame' + str(n) + '.png'
         plt.savefig(pic_name, bbox_inches='tight')
@@ -171,7 +173,9 @@ def make_cylinder_video(pathIn, pathOut, a_as_t, fps=5):
 
     for n in range(num_t):
         if n < 10:
-            pic_name = pathIn + 'frame0' + str(n) + '.png'
+            pic_name = pathIn + 'frame00' + str(n) + '.png'
+        elif n < 100:
+            pic_name = './data_for_video/frame0' + str(n) + '.png'
         else:
             pic_name = './data_for_video/frame' + str(n) + '.png'
         os.remove(pic_name)
@@ -187,7 +191,7 @@ def plot_cylinder2_at_diff_times(a_as_t):
     #ax = fig.gca(projection='3d')
 
     num_t, num_z, num_r, num_theta = np.shape(a_as_t)
-    z_metric = np.linspace(0,1,num_z)
+    z_metric = np.linspace(0,-1,num_z)
 
     #3D matrix
     rr_mat = a_as_t[[0, int(num_t/4), int(num_t/2), num_t-1],:,0,:]
@@ -197,18 +201,18 @@ def plot_cylinder2_at_diff_times(a_as_t):
     for j in range(0,4):
         ax = fig.add_subplot(2, 2, j+1, projection='3d')
         first_half = rr_mat[j,:,0:int(num_theta/2)+1]
-        ZMAT = np.outer(np.linspace(0,1,num_z),np.ones(int(num_theta/2)+1))
+        ZMAT = np.outer(z_metric,np.ones(int(num_theta/2)+1))
         XMAT = first_half * np.outer(np.ones(num_z),np.cos(np.linspace(0, 2*np.pi, num_theta)[:int(num_theta/2)+1]))
         YMAT = first_half * np.outer(np.ones(num_z),np.sin(np.linspace(0, 2*np.pi, num_theta)[:int(num_theta/2)+1]))
         ax.plot_surface(XMAT, YMAT, ZMAT, linewidth = 0.02, alpha = 0.8, cmap=cm.coolwarm)
         second_half = rr_mat[j,:,int(num_theta/2):]
-        ZMAT2 = np.outer(np.linspace(0,1,num_z),np.ones(num_theta - int(num_theta/2)))
+        ZMAT2 = np.outer(z_metric,np.ones(num_theta - int(num_theta/2)))
         XMAT2 = second_half * np.outer(np.ones(num_z),np.cos(np.linspace(0, 2*np.pi, num_theta)[int(num_theta/2):]))
         YMAT2 = second_half * np.outer(np.ones(num_z),np.sin(np.linspace(0, 2*np.pi, num_theta)[int(num_theta/2):]))
         surf = ax.plot_surface(XMAT2, YMAT2, ZMAT2, linewidth = 0.02, alpha = 0.8, cmap=cm.coolwarm)
         fig.colorbar(surf, shrink = 1, aspect=1.5)
 
-        ax.set_zlim(0,1)
+        ax.set_zlim(-1,0)
         ax.set_xlim(-1.1,1.1)
         ax.set_ylim(-1.1,1.1)
         ax.set_xlabel('$x$ axis')
@@ -226,41 +230,43 @@ of plot is by default theta=0, can be changed manually'''
 def plot_against_z_at_different_time(data_mat, variable_name, view_angle = 0):
     # data_mat is a 4d matrix, variable_name is the string name of the data, used for title, should be a or c
     num_t, num_z, num_r, num_theta = np.shape(data_mat)
+    angle = int(np.floor(view_angle/2/np.pi*60))
     z_vec = np.linspace(0,1,num_z)
     t_position = np.zeros(6)
     for i in range(6):
         t_position[i] = int(num_t * i/5)
 
-    plt.plot(z_vec, data_mat[int(t_position[0]), :, 0, view_angle], label = r"$t=0$")
-    plt.plot(z_vec, data_mat[int(t_position[1]), :, 0, view_angle], label = r"$t=0.2t_f$")
-    plt.plot(z_vec, data_mat[int(t_position[2]), :, 0, view_angle], label = r"$t=0.4t_f$")
-    plt.plot(z_vec, data_mat[int(t_position[3]), :, 0, view_angle], label = r"$t=0.6t_f$")
-    plt.plot(z_vec, data_mat[int(t_position[4]), :, 0, view_angle], label = r"$t=0.8t_f$")
-    plt.plot(z_vec, data_mat[-1, :, 0, view_angle], label = r"$t=t_f$")
+    plt.plot(z_vec, data_mat[int(t_position[0]), :, 0, angle], label = r"$t=0$")
+    plt.plot(z_vec, data_mat[int(t_position[1]), :, 0, angle], label = r"$t=0.2t_f$")
+    plt.plot(z_vec, data_mat[int(t_position[2]), :, 0, angle], label = r"$t=0.4t_f$")
+    plt.plot(z_vec, data_mat[int(t_position[3]), :, 0, angle], label = r"$t=0.6t_f$")
+    plt.plot(z_vec, data_mat[int(t_position[4]), :, 0, angle], label = r"$t=0.8t_f$")
+    plt.plot(z_vec, data_mat[-1, :, 0, angle], label = r"$t=t_f$")
     plt.legend()
-    plt.title(variable_name + " against z, at different times")
+    plt.title(variable_name + " against z, at different times, "+ r"$\theta=$" + str(view_angle))
     plt.show()
 
 '''This function automatically generates a plot of the variable you want,
 against t, at six different z's, z= 0, 0.2, 0.40, 0.6, 0.80, 1. The angle of
-of plot is by default theta=0, can be changed manually, shoulbe be an integer between 0 and num_theta'''
+of plot is by default theta=0, can be changed manually, shoulbe be  between 0 and 2pi'''
 def plot_against_t_at_different_z(data_mat, variable_name, endtime, view_angle = 0):
     # data_mat is a 4d matrix, variable_name is the string name of the data, used for title, should be a or c
     # endtime is the time t1 in the main script
     num_t, num_z, num_r, num_theta = np.shape(data_mat)
+    angle = int(np.floor(view_angle/2/np.pi*60))
     t_vec = np.linspace(0, endtime ,num_t)
     z_position = np.zeros(6)
     for i in range(6):
         z_position[i] = int(num_z * i/5)
 
-    plt.plot(t_vec, data_mat[:,int(z_position[0]), 0, view_angle], label = r"$z=0$")
-    plt.plot(t_vec, data_mat[:,int(z_position[1]), 0, view_angle], label = r"$z=0.2$")
-    plt.plot(t_vec, data_mat[:,int(z_position[2]), 0, view_angle], label = r"$z=0.4$")
-    plt.plot(t_vec, data_mat[:,int(z_position[3]), 0, view_angle], label = r"$z=0.6$")
-    plt.plot(t_vec, data_mat[:,int(z_position[4]), 0, view_angle], label = r"$z=0.8$")
-    plt.plot(t_vec, data_mat[:,-1, 0, view_angle], label = r"$z=1$")
+    plt.plot(t_vec, data_mat[:,int(z_position[0]), 0, angle], label = r"$z=0$")
+    plt.plot(t_vec, data_mat[:,int(z_position[1]), 0, angle], label = r"$z=0.2$")
+    plt.plot(t_vec, data_mat[:,int(z_position[2]), 0, angle], label = r"$z=0.4$")
+    plt.plot(t_vec, data_mat[:,int(z_position[3]), 0, angle], label = r"$z=0.6$")
+    plt.plot(t_vec, data_mat[:,int(z_position[4]), 0, angle], label = r"$z=0.8$")
+    plt.plot(t_vec, data_mat[:,-1, 0, angle], label = r"$z=1$")
     plt.legend()
-    plt.title(variable_name + " against t, at different z's")
+    plt.title(variable_name + " against t, at different z's, " + r"$\theta=$" + str(view_angle))
     plt.show()
 
 

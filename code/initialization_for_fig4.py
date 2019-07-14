@@ -1,7 +1,7 @@
 import numpy as np
 
 # time discretization
-t1         = 0.25                     #end time
+t1         = 0.9                     #end time
 dt         = 0.005                    #time interval delta t
 N          = int(t1/dt+1)             #the num of steps of each path
 t          = np.linspace(0, t1, N)   #time steps (0, t1, t1/h+1)
@@ -13,7 +13,7 @@ L_hat      = R_hat/0.2                       #fluid-cell-layer interface length,
 ##################
 ##################
 Sigma_hat  = 1e-2*64                     #??? Coefficient in Q = Sigma DivC
-Lambda_hat = .05                     #??? Coefficient at the bundary
+Lambda_hat = .4                     #??? Coefficient at the bundary
 ##################
 ##################
 e          = R_hat/L_hat             #epsilon

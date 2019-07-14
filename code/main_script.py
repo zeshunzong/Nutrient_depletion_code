@@ -25,10 +25,12 @@ from initialization_for_fig4 import *
 '''WARNING: IF RERUN THE SIMULATION, MAKE SURE THE ABOVE DIRECTORIES ARE EMPTY '''
 #############################
 # Simulation
+a0,a1,Lambda2,Gamma2,a,sigmaS0,sigmaS1,c,c0,c1,c2 = Simulation_Wz_C(basic_args_for_loop, parameters_args, variable_args, initial_cond_args)
 #a0,a1,Lambda2,Gamma2,a,sigmaS0,sigmaS1,c,c0,c1,c2 = Simulation_Wz_C(basic_args_for_loop, parameters_args, variable_args, initial_cond_args)
+
 #############################
 # Movie
-#make_video(a, "video.mp4")
+make_video(a, "video_wz_c.mp4")
 #############################
 # Store
 #store_simulation_results(a0, a1, a, c0, c1, c2, c, Lambda2, Gamma2, sigmaS0, sigmaS1, "storage_results")
@@ -38,7 +40,10 @@ from initialization_for_fig4 import *
 '''WARNING: PLEASE MAKE SURE, WHEN STEP 2 IS EXECUTED, STEP 1 HAS ALREADY BEEN EXECUTED AND HAS BEEN COMMENTTED OUT'''
 #############################
 # Load results
-a0, a1, a, c0, c1, c2, c, Lambda2, Gamma2, sigmaS0, sigmaS1 = load_simulation_results("storage_results", (N, num_z, num_r, num_theta))
+#a0, a1, a, c0, c1, c2, c, Lambda2, Gamma2, sigmaS0, sigmaS1 = load_simulation_results("storage_results", (N, num_z, num_r, num_theta))
 
-
-plot_against_t_at_different_z(c,"c", endtime = t1)
+#plot_cylinder2_at_diff_times(a)
+#plot_against_t_at_different_z(a,"a", endtime = t1, view_angle = 3.14)
+#plot_against_t_at_different_z(a,"a", endtime = t1, view_angle = 0)
+#plot_against_t_at_different_z(a,"a", endtime = t1, view_angle = 3.14/2)
+#plot_against_t_at_different_z(a,"a", endtime = t1, view_angle = 6.28)
