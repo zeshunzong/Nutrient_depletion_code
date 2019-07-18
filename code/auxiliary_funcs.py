@@ -224,50 +224,6 @@ def plot_cylinder2_at_diff_times(a_as_t):
     plt.show()
 
 
-'''This function automatically generates a plot of the variable you want,
-against z, at six different times, 0%, 20%, 40%, 60%, 80%, 100%. The angle of
-of plot is by default theta=0, can be changed manually'''
-def plot_against_z_at_different_time(data_mat, variable_name, view_angle = 0):
-    # data_mat is a 4d matrix, variable_name is the string name of the data, used for title, should be a or c
-    num_t, num_z, num_r, num_theta = np.shape(data_mat)
-    angle = int(np.floor(view_angle/2/np.pi*num_theta))
-    z_vec = np.linspace(0,1,num_z)
-    t_position = np.zeros(6)
-    for i in range(6):
-        t_position[i] = int(num_t * i/5)
-
-    plt.plot(z_vec, data_mat[int(t_position[0]), :, 0, angle], label = r"$t=0$")
-    plt.plot(z_vec, data_mat[int(t_position[1]), :, 0, angle], label = r"$t=0.2t_f$")
-    plt.plot(z_vec, data_mat[int(t_position[2]), :, 0, angle], label = r"$t=0.4t_f$")
-    plt.plot(z_vec, data_mat[int(t_position[3]), :, 0, angle], label = r"$t=0.6t_f$")
-    plt.plot(z_vec, data_mat[int(t_position[4]), :, 0, angle], label = r"$t=0.8t_f$")
-    plt.plot(z_vec, data_mat[-1, :, 0, angle], label = r"$t=t_f$")
-    plt.legend()
-    plt.title(variable_name + " against z, at different times, "+ r"$\theta=$" + str(view_angle))
-    plt.show()
-
-'''This function automatically generates a plot of the variable you want,
-against t, at six different z's, z= 0, 0.2, 0.40, 0.6, 0.80, 1. The angle of
-of plot is by default theta=0, can be changed manually, shoulbe be  between 0 and 2pi'''
-def plot_against_t_at_different_z(data_mat, variable_name, endtime, view_angle = 0):
-    # data_mat is a 4d matrix, variable_name is the string name of the data, used for title, should be a or c
-    # endtime is the time t1 in the main script
-    num_t, num_z, num_r, num_theta = np.shape(data_mat)
-    angle = int(np.floor(view_angle/2/np.pi*num_theta))
-    t_vec = np.linspace(0, endtime ,num_t)
-    z_position = np.zeros(6)
-    for i in range(6):
-        z_position[i] = int(num_z * i/5)
-
-    plt.plot(t_vec, data_mat[:,int(z_position[0]), 0, angle], label = r"$z=0$")
-    plt.plot(t_vec, data_mat[:,int(z_position[1]), 0, angle], label = r"$z=0.2$")
-    plt.plot(t_vec, data_mat[:,int(z_position[2]), 0, angle], label = r"$z=0.4$")
-    plt.plot(t_vec, data_mat[:,int(z_position[3]), 0, angle], label = r"$z=0.6$")
-    plt.plot(t_vec, data_mat[:,int(z_position[4]), 0, angle], label = r"$z=0.8$")
-    plt.plot(t_vec, data_mat[:,-1, 0, angle], label = r"$z=1$")
-    plt.legend()
-    plt.title(variable_name + " against t, at different z's, " + r"$\theta=$" + str(view_angle))
-    plt.show()
 
 
 
@@ -302,7 +258,7 @@ def plot_against_t_at_different_z(data_mat, variable_name, endtime, view_angle =
     # endtime is the time t1 in the main script
     num_t, num_z, num_r, num_theta = np.shape(data_mat)
     angle = int(np.floor(view_angle/2/np.pi*num_theta))
-    t_vec = np.linspace(0, endtime ,num_t)
+    t_vec = np.linspace(0, dt*(num_t-1), num_t)
     z_position = np.zeros(6)
     for i in range(6):
         z_position[i] = int(num_z * i/5)
@@ -434,20 +390,20 @@ def total_tissue_growth(a):
     '''parameter: a from function Simulation_Wz_C()
     return: the total tissue growth of this simulation'''
     th = theta_mat[:,0,:] #take the first row of all theta_mat for each z
-
+    num_t, num_z, num_r, num_theta = np.shape(a)
     a_initial = a[0,:,0,:] #get the initial value, only need the first row, since each row are the same for same z
     a_x0 = a_initial*np.cos(th) # convert r,theta to x,y representation
     a_y0 = a_initial*np.sin(th)
 
     I_list = []
-    for i in range(N): #time loop
+    for i in range(num_t): #time loop
         a_final = a[i,:,0,:]  #take the a at time i
         a_x1 = a_final*np.cos(th)
         a_y1 = a_final*np.sin(th)
         I = np.sum(simps(a_x0,a_y0)-simps(a_x1,a_y1))/num_z
         I_list.append(I)
-    plt.plot(t,I_list)
-    plt.title("total tissue growth")
+    plt.plot(np.linspace(0, dt*(num_t-1), num_t),I_list)
+    plt.title("Total Tissue Growth")
     plt.show()
 
 def plot_from_above(a):
@@ -455,10 +411,10 @@ def plot_from_above(a):
     plt.figure(figsize=(5,5))
     ax = plt.subplot(111, projection='polar')
     ax.plot(0,1)
-    ax.plot(theta[0], a[0,0,  0,:] ,'-.',label="z=0",   linewidth=0.7)
-    ax.plot(theta[0], a[0,-1,0,:] ,'--',label="z=0.2", linewidth=0.7)
-    ax.plot(theta[0], a[-1,0,  0,:] ,'-.',label="z=0",   linewidth=0.7)
-    ax.plot(theta[0], a[-1,-1,0,:] ,'--',label="z=0.2", linewidth=0.7)
+    ax.plot(theta[0], a[0,0,  0,:] ,'-.',label=r"$z=0, @ t_0$",   linewidth=0.7)
+    ax.plot(theta[0], a[0,-1,0,:] ,'--',label=r"$z=0.2, @ t_0$", linewidth=0.7)
+    ax.plot(theta[0], a[-1,0,  0,:] ,'-.',label=r"$z=0, @ t_f$",   linewidth=0.7)
+    ax.plot(theta[0], a[-1,-1,0,:] ,'--',label=r"$z=0.2, @ t_f$", linewidth=0.7)
     #ax.plot(theta[0], a[-1,80,0,:] ,'-',label="z=0.4", linewidth=1)
     #ax.plot(theta[0], a[-1,120,0,:] ,'-.',label="z=0.6", linewidth=1.4)
     #ax.plot(theta[0], a[-1,160,0,:] ,'--',label="z=0.8", linewidth=1.7)
@@ -468,5 +424,12 @@ def plot_from_above(a):
     ax.tick_params(direction='out', length= 6, width = 0.1, colors='k')
     plt.legend(loc = 'upper left')
     ax.grid(True)
+    plt.title("View from above")
     #ax.axis('off')
     plt.show()
+
+def truncate_excess_part(a0, a1, a, c0, c1, c2, c, Lambda2, Gamma2, sigmaS0, sigmaS1):
+    pointer = N-1
+    while np.allclose(a[pointer-1,:,:,:], a[pointer,:,:,:]):
+        pointer = pointer - 1
+    return a0[:pointer,:,:,:], a1[:pointer,:,:,:], a[:pointer,:,:,:], c0[:pointer,:,:,:], c1[:pointer,:,:,:], c2[:pointer,:,:,:], c[:pointer,:,:,:], Lambda2[:pointer,:,:,:], Gamma2[:pointer,:,:,:], sigmaS0[:pointer,:,:,:], sigmaS1[:pointer,:,:,:]
