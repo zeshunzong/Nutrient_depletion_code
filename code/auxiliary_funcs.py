@@ -10,6 +10,7 @@ from os.path import isfile, join
 from matplotlib import cm
 import scipy.io
 from initialization import *
+
 def transpose(x):
     '''a function used to take transpose of each matrix inside a tensor x
      x is a tensor n*d*c, return n*c*d'''
@@ -22,13 +23,13 @@ def transpose(x):
         X_T[:,:,i]=x[:,i,:]
     return X_T
 
-def f(s):
+def f(s,sigma1,sigma2,F1,F2):
     '''function in Tissue Paper (43)'''
-    F1 = 1
-    F2 = 3
+    #F1 = 1
+    #F2 = 3
     m  = 5000
-    sigma1 = 7
-    sigma2 = 15
+    #sigma1 = 7
+    #sigma2 = 15
     fs = F1+(F2-F1)*(1+np.tanh(m*(s-sigma1)))/2-F2*(1+np.tanh(m*(s-sigma2)))/2
     return fs
 
@@ -224,9 +225,6 @@ def plot_cylinder2_at_diff_times(a_as_t):
     plt.show()
 
 
-
-
-
 '''This function automatically generates a plot of the variable you want,
 against z, at six different times, 0%, 20%, 40%, 60%, 80%, 100%. The angle of
 of plot is by default theta=0, can be changed manually'''
@@ -240,14 +238,18 @@ def plot_against_z_at_different_time(data_mat, variable_name, view_angle = 0):
     for i in range(6):
         t_position[i] = int(num_t * i/5)
 
-    plt.plot(z_vec, data_mat[int(t_position[0]), :, 0, angle], label = r"$t=0$")
-    plt.plot(z_vec, data_mat[int(t_position[1]), :, 0, angle], label = r"$t=0.2t_f$")
-    plt.plot(z_vec, data_mat[int(t_position[2]), :, 0, angle], label = r"$t=0.4t_f$")
-    plt.plot(z_vec, data_mat[int(t_position[3]), :, 0, angle], label = r"$t=0.6t_f$")
-    plt.plot(z_vec, data_mat[int(t_position[4]), :, 0, angle], label = r"$t=0.8t_f$")
-    plt.plot(z_vec, data_mat[-1, :, 0, angle], label = r"$t=t_f$")
+    plt.plot(z_vec, data_mat[int(t_position[0]), :, 0, angle], linewidth=0.7, label = r"$t=0$")
+    plt.plot(z_vec, data_mat[int(t_position[1]), :, 0, angle], '--', linewidth=0.7, label = r"$t=0.2t_f$")
+    plt.plot(z_vec, data_mat[int(t_position[2]), :, 0, angle], '-.', linewidth=0.7,label = r"$t=0.4t_f$")
+    plt.plot(z_vec, data_mat[int(t_position[3]), :, 0, angle], '--',linewidth=1.5,label = r"$t=0.6t_f$")
+    plt.plot(z_vec, data_mat[int(t_position[4]), :, 0, angle], '-.',linewidth=2,label = r"$t=0.8t_f$")
+    plt.plot(z_vec, data_mat[-1, :, 0, angle], '-',linewidth=2, label = r"$t=t_f$")
+    plt.xlim([0, 1])
+    plt.ylim([np.min(data_mat), np.max(data_mat)])
+    plt.ylabel(variable_name)
+    plt.xlabel("z")
     plt.legend()
-    plt.title(variable_name + " against z, at different times, "+ r"$\theta=$" + str(view_angle))
+    #plt.title(variable_name + " against z, at different times, "+ r"$\theta=$" + str(view_angle))
     plt.show()
 
 '''This function automatically generates a plot of the variable you want,
@@ -263,14 +265,18 @@ def plot_against_t_at_different_z(data_mat, variable_name, endtime, view_angle =
     for i in range(6):
         z_position[i] = int(num_z * i/5)
 
-    plt.plot(t_vec, data_mat[:,int(z_position[0]), 0, angle], label = r"$z=0$")
-    plt.plot(t_vec, data_mat[:,int(z_position[1]), 0, angle], label = r"$z=0.2$")
-    plt.plot(t_vec, data_mat[:,int(z_position[2]), 0, angle], label = r"$z=0.4$")
-    plt.plot(t_vec, data_mat[:,int(z_position[3]), 0, angle], label = r"$z=0.6$")
-    plt.plot(t_vec, data_mat[:,int(z_position[4]), 0, angle], label = r"$z=0.8$")
-    plt.plot(t_vec, data_mat[:,-1, 0, angle], label = r"$z=1$")
+    plt.plot(t_vec, data_mat[:,int(z_position[0]), 0, angle], linewidth=0.7,label = r"$z=0$")
+    plt.plot(t_vec, data_mat[:,int(z_position[1]), 0, angle],  '--', linewidth=0.7,label = r"$z=0.2$")
+    plt.plot(t_vec, data_mat[:,int(z_position[2]), 0, angle],  '-.', linewidth=0.7,label = r"$z=0.4$")
+    plt.plot(t_vec, data_mat[:,int(z_position[3]), 0, angle], '--',linewidth=1.5,label = r"$z=0.6$")
+    plt.plot(t_vec, data_mat[:,int(z_position[4]), 0, angle], '-.',linewidth=2,label = r"$z=0.8$")
+    plt.plot(t_vec, data_mat[:,-1, 0, angle], '-',linewidth=2, label = r"$z=1$")
+    plt.xlim([0, t1])
+    plt.ylim([np.min(data_mat), np.max(data_mat)])
+    plt.ylabel(variable_name)
+    plt.xlabel("t")
     plt.legend()
-    plt.title(variable_name + " against t, at different z's, " + r"$\theta=$" + str(view_angle))
+    #plt.title(variable_name + " against t, at different z's, " + r"$\theta=$" + str(view_angle))
     plt.show()
 
 
@@ -292,6 +298,7 @@ def reduce_mat_size_to_2D(mat4d):
 def reconstruct_4dmat_from_3d(mat3d, num_t, num_z, num_r, num_theta):
     # this function applies to reduced version of a0, a1, and a
     mat4d = np.zeros([num_t, num_z, num_r, num_theta])
+    #print("size mat4d,",mat3d)
     for i in range(num_r):
         mat4d[:,:,i,:] = mat3d
     return mat4d
@@ -360,18 +367,18 @@ def load_simulation_results(folder_name, sizes):
 
     reduced_a0 = scipy.io.loadmat("a0_mat.mat")["a0"]
     reduced_a1 = scipy.io.loadmat("a1_mat.mat")["a1"]
-    reduced_a = scipy.io.loadmat("a_mat.mat")["a"]
+    reduced_a  = scipy.io.loadmat("a_mat.mat")["a"]
 
     reduced_c0 = scipy.io.loadmat("c0_mat.mat")["c0"]
     reduced_c1 = scipy.io.loadmat("c1_mat.mat")["c1"]
     reduced_c2 = scipy.io.loadmat("c2_mat.mat")["c2"]
-    reduced_c = scipy.io.loadmat("c_mat.mat")["c"]
+    reduced_c  = scipy.io.loadmat("c_mat.mat")["c"]
 
     reduced_Lambda2 = scipy.io.loadmat("Lambda2_mat.mat")["Lambda2"]
-    reduced_Gamma2 = scipy.io.loadmat("Gamma2_mat.mat")["Gamma2"]
+    reduced_Gamma2  = scipy.io.loadmat("Gamma2_mat.mat")["Gamma2"]
     reduced_sigmaS0 = scipy.io.loadmat("sigmaS0_mat.mat")["sigmaS0"]
     reduced_sigmaS1 = scipy.io.loadmat("sigmaS1_mat.mat")["sigmaS1"]
-
+    
     return get_back_mats(reduced_a0, reduced_a1, reduced_a, reduced_c0, reduced_c1, reduced_c2, reduced_c, reduced_Lambda2, reduced_Gamma2, reduced_sigmaS0, reduced_sigmaS1, sizes)
 
 
@@ -385,8 +392,7 @@ def make_video(a, video_name = 'video.mp4'):
     make_cylinder_video(pathIn, pathOut, a[:,:,0,:])
 
 
-
-def total_tissue_growth(a):
+def total_tissue_growth(a, Plot):
     '''parameter: a from function Simulation_Wz_C()
     return: the total tissue growth of this simulation'''
     th = theta_mat[:,0,:] #take the first row of all theta_mat for each z
@@ -402,15 +408,22 @@ def total_tissue_growth(a):
         a_y1 = a_final*np.sin(th)
         I = np.sum(simps(a_x0,a_y0)-simps(a_x1,a_y1))/num_z
         I_list.append(I)
-    plt.plot(np.linspace(0, dt*(num_t-1), num_t),I_list)
-    plt.title("Total Tissue Growth")
-    plt.show()
+    if Plot:
+        plt.plot(t,I_list)
+        plt.ylabel("Total Tissue Growth")
+        plt.xlabel("time")
+        plt.ylim([0,1.2])
+        plt.xlim([0, t1])
+        plt.show()
+    return I_list
 
 def plot_from_above(a):
     """Vertical view Plot, at final time and the initial time, with different z"""
     plt.figure(figsize=(5,5))
     ax = plt.subplot(111, projection='polar')
     ax.plot(0,1)
+    #print(len(theta[0]))
+    #print(len(a[0,0,0,:]))
     ax.plot(theta[0], a[0,0,  0,:] ,'-.',label=r"$z=0, @ t_0$",   linewidth=0.7)
     ax.plot(theta[0], a[0,-1,0,:] ,'--',label=r"$z=0.2, @ t_0$", linewidth=0.7)
     ax.plot(theta[0], a[-1,0,  0,:] ,'-.',label=r"$z=0, @ t_f$",   linewidth=0.7)
@@ -430,6 +443,8 @@ def plot_from_above(a):
 
 def truncate_excess_part(a0, a1, a, c0, c1, c2, c, Lambda2, Gamma2, sigmaS0, sigmaS1):
     pointer = N-1
+    '''np.allclose
+        Returns True if two arrays are element-wise equal within a tolerance.'''
     while np.allclose(a[pointer-1,:,:,:], a[pointer,:,:,:]):
         pointer = pointer - 1
     return a0[:pointer,:,:,:], a1[:pointer,:,:,:], a[:pointer,:,:,:], c0[:pointer,:,:,:], c1[:pointer,:,:,:], c2[:pointer,:,:,:], c[:pointer,:,:,:], Lambda2[:pointer,:,:,:], Gamma2[:pointer,:,:,:], sigmaS0[:pointer,:,:,:], sigmaS1[:pointer,:,:,:]

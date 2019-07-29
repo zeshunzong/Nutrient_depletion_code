@@ -11,11 +11,11 @@ import numpy as np
 from auxiliary_funcs import *
 from initialization import *
 
-#def Simulation_Wz_C(basic_args_for_loop, parameters_args, variable_args, initial_cond_args):
-def Simulation_Wz_C():
-    # t1, dt, N, t, num_z, num_r, num_theta = basic_args_for_loop
-    # R_hat, Qi_hat, L_hat, Sigma_hat, Lambda_hat, e, n, pe_star, pe, lam_star = parameters_args
-    # a, r, theta, z, Extand_Mat, r_mat, theta_mat, z_mat = variable_args
+def Simulation_Wz_C(basic_args_for_loop, parameters_args, variable_args, initial_cond_args):
+#def Simulation_Wz_C():
+    t1, dt, N, t, num_z, num_r, num_theta = basic_args_for_loop
+    R_hat, Qi_hat, L_hat, Sigma_hat, Lambda_hat, e, n, pe_star, pe, lam_star,sigma1,sigma2,F1,F2 = parameters_args
+    a, r, theta, z, Extand_Mat, r_mat, theta_mat, z_mat = variable_args
     a1, Lambda2, Gamma2, da1_dz, Lambda2_mat, Lambda_Cos, Gamma2_mat, a0_mat, a1_mat, a2_mat, a_mat, da1_dz_mat = initial_cond_args
 
     ## allocate space for recording statistics
@@ -30,7 +30,7 @@ def Simulation_Wz_C():
     c0_tensor        = np.zeros([N,num_z,num_r,num_theta])
     c1_tensor        = np.zeros([N,num_z,num_r,num_theta])
     c2_tensor        = np.zeros([N,num_z,num_r,num_theta])
-
+    
     #with concentration
     for i in range(N):## Time Loop
 
@@ -77,7 +77,7 @@ def Simulation_Wz_C():
         k2_mat      = n**2*Lambda2_mat/a0_mat**2
 
         ## update f and f' and f''
-        f_mat       = f(sigmaS0_mat)
+        f_mat       = f(sigmaS0_mat,sigma1,sigma2,F1,F2)
         df_mat      = 0*Extand_Mat
         df2_mat     = 0*Extand_Mat
 
