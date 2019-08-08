@@ -20,27 +20,60 @@ a0, a1, a, c0, c1, c2, c, Lambda2, Gamma2, sigmaS0, sigmaS1 = load_simulation_re
 
 
 ## MAKE A MOVIE
-#make_video(a, "video_wz_c_new.mp4")
+#make_video(a, "video_wz_c_nw.mp4")
 
 Plot = True
 if Plot:
     # plot the cylinder at different time
     plot_cylinder2_at_diff_times(a)
     
-    view_angle = 0.5
+    view_angle = 0
     
     # plot a1 w.r.t.z at different time
-    plot_against_z_at_different_time(c, "c", view_angle)
+    #plot_against_z_at_different_time(c, "c", view_angle)
     
     # plot concentration w.r.t t at different z
-    plot_against_t_at_different_z(c,"c", t1, view_angle)
-    
+    #plot_against_t_at_different_z(c,"c", t1, view_angle)
+
+    # plot a1 w.r.t.z at different time
+    plot_against_z_at_different_time(a0, "a0", view_angle)
+
+    # plot a1 w.r.t.z at different time
+    plot_against_z_at_different_time(a, "a", view_angle)
+
+    # plot a1 w.r.t.z at different time
+    plot_against_z_at_different_time(a1, "a1", view_angle)
+
+    # plot a1 w.r.t.z at different time
+    plot_against_z_at_different_time(Lambda2, "Lambda2", view_angle)
+
+    # plot a1 w.r.t.z at different time
+    plot_against_z_at_different_time(Gamma2, "Gamma2", view_angle)
+
     # plot a w.r.t t at different position
-    plot_against_t_at_different_z(a,"a", t1, view_angle)
+    plot_against_t_at_different_z(a, "a", t1, view_angle)
+
+    # plot a w.r.t t at different position
+    plot_against_t_at_different_z(a0,"a0", t1, view_angle)
+
+    # plot a w.r.t t at different position
+    plot_against_t_at_different_z(a1, "a1", t1, view_angle)
+
+    # plot a w.r.t t at different position
+    plot_against_t_at_different_z(Lambda2, "Lambda2", t1, view_angle)
+
+    # plot a w.r.t t at different position
+    plot_against_t_at_different_z(Gamma2, "Gamma2", t1, view_angle)
+
+    # plot a w.r.t t at different position
+    plot_against_t_at_different_z(c, "c", t1, view_angle)
+
+    # plot a w.r.t t at different position
+    plot_against_t_at_different_z(c2, "c2", t1, view_angle)
 
     # plot the total tissue growth
-    total_tissue_growth(a, Plot)
-    
+    I_list = total_tissue_growth(a, Plot)
+
     #Vertical View Plot
     plot_from_above(a)
     

@@ -6,13 +6,14 @@ from initialization import *   #params about time and space discretization are i
 ##################
 ##Important param that we need to modify and plot
 Sigma_hat  = 1e-2*64                  #??? Coefficient in Q = Sigma DivC
-Lambda_hat = 0                        #??? Coefficient at the bundary
+eta_hat = 0.2                        #??? Coefficient at the bundary
+#eta_hat = 0
 ##################
 ##################
 n          = 4                        #number of the angles
 pe_star    = L_hat*e**2*Qi_hat/(np.pi*R_hat**2*Sigma_hat)
 pe         = pe_star/e
-lam_star   = Lambda_hat*np.pi*R_hat**2/(Qi_hat*e)
+eta_star   = eta_hat*np.pi*R_hat**2/(Qi_hat*e)
 ##Constant param used in Bio Growth function (paper fig.2)
 sigma1     = 7                        
 sigma2     = 15 
@@ -35,6 +36,7 @@ The same notation used also for other variables'''
 
 #a0          = 0.9*np.ones([1,num_z])                       #Fig.4 in Tissue Paper
 a1          = -z-0.5
+#a1 = z*0
 Lambda2     = -z+2
 Gamma2      = -z+2
 da1_dz      = -1*np.ones([1,num_z])
@@ -49,6 +51,6 @@ da1_dz_mat  = Extand_Mat*np.reshape(da1_dz,[num_z,1,1])
 
 ## Wrap the params
 basic_args_for_loop = (t1, dt, N, t, num_z, num_r, num_theta)
-parameters_args = (R_hat, Qi_hat, L_hat, Sigma_hat, Lambda_hat, e, n, pe_star, pe, lam_star,sigma1,sigma2,F1,F2)
+parameters_args = (R_hat, Qi_hat, L_hat, Sigma_hat, eta_hat, e, n, pe_star, pe, eta_star,sigma1,sigma2,F1,F2)
 variable_args = (a, r, theta, z, Extand_Mat, r_mat, theta_mat, z_mat)
 initial_cond_args = (a1, Lambda2, Gamma2, da1_dz, Lambda2_mat, Lambda_Cos, Gamma2_mat, a0_mat, a1_mat, a2_mat, a_mat, da1_dz_mat)

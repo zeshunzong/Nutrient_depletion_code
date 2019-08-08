@@ -14,7 +14,7 @@ from initialization import *
 def Simulation_Wz_C(basic_args_for_loop, parameters_args, variable_args, initial_cond_args):
 #def Simulation_Wz_C():
     t1, dt, N, t, num_z, num_r, num_theta = basic_args_for_loop
-    R_hat, Qi_hat, L_hat, Sigma_hat, Lambda_hat, e, n, pe_star, pe, lam_star,sigma1,sigma2,F1,F2 = parameters_args
+    R_hat, Qi_hat, L_hat, Sigma_hat, eta_hat, e, n, pe_star, pe, eta_star,sigma1,sigma2,F1,F2 = parameters_args
     a, r, theta, z, Extand_Mat, r_mat, theta_mat, z_mat = variable_args
     a1, Lambda2, Gamma2, da1_dz, Lambda2_mat, Lambda_Cos, Gamma2_mat, a0_mat, a1_mat, a2_mat, a_mat, da1_dz_mat = initial_cond_args
 
@@ -56,14 +56,14 @@ def Simulation_Wz_C(basic_args_for_loop, parameters_args, variable_args, initial
 
         ## update C -- nutri concetration
         #  function of z
-        c0_mat      = np.exp(-2*lam_star*a0_mat*z_mat)
-        c1_mat      = 4*a0_mat**4/pe*lam_star**2*z_mat*np.exp(-2*a0_mat*lam_star*z_mat)
-        c2_mat      = np.exp(-2*a0_mat*lam_star*z_mat)*(z_mat*(-16*a0_mat**7*lam_star**3/pe**2-\
-                            4*a0_mat**2*lam_star/pe*da1_dz_mat-\
-                            4*a1_mat**2*lam_star/a0_mat+2*a1_mat**4*lam_star/a0_mat**3)+\
-                            0.5*z_mat**2*16*a0_mat**8*lam_star**4/pe**2)
+        c0_mat      = np.exp(-2*eta_star*a0_mat*z_mat)
+        c1_mat      = 4*a0_mat**4/pe*eta_star**2*z_mat*np.exp(-2*a0_mat*eta_star*z_mat)
+        c2_mat      = np.exp(-2*a0_mat*eta_star*z_mat)*(z_mat*(-16*a0_mat**7*eta_star**3/pe**2-\
+                            4*a0_mat**2*eta_star/pe*da1_dz_mat-\
+                            4*a1_mat**2*eta_star/a0_mat+2*a1_mat**4*eta_star/a0_mat**3)+\
+                            0.5*z_mat**2*16*a0_mat**8*eta_star**4/pe**2)
         c_mat       = c0_mat+e*c1_mat+e**2*c2_mat
-
+        #print(lam_star)
         ## update sigmaS
         sigmaS0_mat = a0_mat/2*xi0_mat
         sigmaS1_mat = 2*a1_mat*xi0_mat
@@ -104,20 +104,20 @@ def Simulation_Wz_C(basic_args_for_loop, parameters_args, variable_args, initial
         c0_tensor[i,:,:,:]      = c0_mat
         c1_tensor[i,:,:,:]      = c1_mat
         c2_tensor[i,:,:,:]      = c2_mat
-        print(f_mat[:,0,0])
 
         #print(c1_mat*k0_mat*f_mat)
 
     return a0_tensor,a1_tensor,Lambda2_tensor,Gamma2_tensor,a_tensor,sigmaS0_tensor,sigmaS1_tensor,c_tensor,c0_tensor,c1_tensor,c2_tensor
 
 
+"""a remark: we actually do not need this function. By setting eat_hat to be 0, we automatically will get no C simulation"""
+def Simulation_No_C(basic_args_for_loop, parameters_args, variable_args, initial_cond_args):
+#def Simulation_No_C():
 
-#def Simulation_No_C(basic_args_for_loop, parameters_args, variable_args, initial_cond_args):
-def Simulation_No_C():
-    # t1, dt, N, t, num_z, num_r, num_theta = basic_args_for_loop
-    # R_hat, Qi_hat, L_hat, Sigma_hat, Lambda_hat, e, n, pe_star, pe, lam_star = parameters_args
-    # a, r, theta, z, Extand_Mat, r_mat, theta_mat, z_mat = variable_args
-    # a1, Lambda2, Gamma2, da1_dz, Lambda2_mat, Lambda_Cos, Gamma2_mat, a0_mat, a1_mat, a2_mat, a_mat, da1_dz_mat = initial_cond_args
+    t1, dt, N, t, num_z, num_r, num_theta = basic_args_for_loop
+    R_hat, Qi_hat, L_hat, Sigma_hat, eta_hat, e, n, pe_star, pe, eta_star, sigma1, sigma2, F1, F2 = parameters_args
+    a, r, theta, z, Extand_Mat, r_mat, theta_mat, z_mat = variable_args
+    a1, Lambda2, Gamma2, da1_dz, Lambda2_mat, Lambda_Cos, Gamma2_mat, a0_mat, a1_mat, a2_mat, a_mat, da1_dz_mat = initial_cond_args
 
     '''simulation with C is a constant'''
     ## allocate space for recording statistics
@@ -176,7 +176,7 @@ def Simulation_No_C():
         k2_mat      = n**2*Lambda2_mat/a0_mat**2
 
         ## update f and f' and f''
-        f_mat       = f(sigmaS0_mat)
+        f_mat       = f(sigmaS0_mat,sigma1,sigma2,F1,F2)
         df_mat      = 0*Extand_Mat
         df2_mat     = 0*Extand_Mat
 

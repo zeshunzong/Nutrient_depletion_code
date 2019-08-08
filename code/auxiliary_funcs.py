@@ -155,7 +155,7 @@ def make_cylinder_video(pathIn, pathOut, a_as_t, fps=5):
     # a_as_t: a matrix that records how a changes as t goes
     # fps: the smaller, the longer the video
 
-    a_as_t = a_as_t[:, :, 0,:]
+    #a_as_t = a_as_t[:, :, 0,:]
     num_t, useless1, useless2 = np.shape(a_as_t)
 
     # save the frames as pictures
@@ -337,7 +337,7 @@ def get_back_mats(reduced_a0, reduced_a1, reduced_a, reduced_c0, reduced_c1, red
     c2 = reconstruct_4dmat_from_2d(reduced_c2,num_t, num_z, num_r, num_theta)
     c  = reconstruct_4dmat_from_2d(reduced_c, num_t, num_z, num_r, num_theta)
     Lambda2 = reconstruct_4dmat_from_2d(reduced_Lambda2,num_t, num_z, num_r, num_theta)
-    Gamma2 = reconstruct_4dmat_from_2d(reduced_Gamma2,num_t, num_z, num_r, num_theta)
+    Gamma2  = reconstruct_4dmat_from_2d(reduced_Gamma2,num_t, num_z, num_r, num_theta)
     sigmaS0 = reconstruct_4dmat_from_2d(reduced_sigmaS0,num_t, num_z, num_r, num_theta)
     sigmaS1 = reconstruct_4dmat_from_2d(reduced_sigmaS1,num_t, num_z, num_r, num_theta)
 
@@ -410,7 +410,7 @@ def total_tissue_growth(a, Plot):
         plt.plot(t,I_list)
         plt.ylabel("Total Tissue Growth")
         plt.xlabel("time")
-        plt.ylim([0,1.2])
+        plt.ylim([0,np.max(I_list)*1.05])
         plt.xlim([0, t1])
         plt.show()
     return I_list
@@ -422,10 +422,10 @@ def plot_from_above(a):
     ax.plot(0,1)
     #print(len(theta[0]))
     #print(len(a[0,0,0,:]))
-    ax.plot(theta[0], a[0,0,  0,:] ,'-.',label=r"$z=0, @ t_0$",   linewidth=0.7)
-    ax.plot(theta[0], a[0,-1,0,:] ,'--',label=r"$z=0.2, @ t_0$", linewidth=0.7)
-    ax.plot(theta[0], a[-1,0,  0,:] ,'-.',label=r"$z=0, @ t_f$",   linewidth=0.7)
-    ax.plot(theta[0], a[-1,-1,0,:] ,'--',label=r"$z=0.2, @ t_f$", linewidth=0.7)
+    ax.plot(theta[0], a[0,0,  0,:] , '-.', label=r"$z=0, @ t_0$", linewidth=0.7)
+    ax.plot(theta[0], a[0,-1,0,:] ,  '--', label=r"$z=1, @ t_0$", linewidth=0.7)
+    ax.plot(theta[0], a[-1,0,  0,:], '-.', label=r"$z=0, @ t_f$", linewidth=0.7)
+    ax.plot(theta[0], a[-1,-1,0,:],  '--', label=r"$z=1, @ t_f$", linewidth=0.7)
     #ax.plot(theta[0], a[-1,80,0,:] ,'-',label="z=0.4", linewidth=1)
     #ax.plot(theta[0], a[-1,120,0,:] ,'-.',label="z=0.6", linewidth=1.4)
     #ax.plot(theta[0], a[-1,160,0,:] ,'--',label="z=0.8", linewidth=1.7)
